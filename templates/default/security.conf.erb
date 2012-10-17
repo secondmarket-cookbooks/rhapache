@@ -1,0 +1,10 @@
+#
+# Allow TRACE method
+#
+# Set to "extended" to also reflect the request body (only for testing and
+# diagnostic purposes).
+#
+# Set to one of:  On | Off | extended
+#
+TraceEnable <%= node[:apache][:traceenable] %> 
+
