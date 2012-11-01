@@ -1,0 +1,1 @@
+cookbook 'rhapache', :path => '/Users/jdunn/Dropbox/devel/github/secondmarket-cookbooks/rhapache'
