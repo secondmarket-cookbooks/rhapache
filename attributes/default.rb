@@ -17,33 +17,33 @@
 # limitations under the License.
 #
 
-set[:apache][:root_group]  = "root"
+set[:rhapache][:root_group]  = "root"
 
 # Where the various parts of apache are
-set[:apache][:package] = "httpd"
-set[:apache][:dir]     = "/etc/httpd"
-set[:apache][:log_dir] = "/var/log/httpd"
-set[:apache][:error_log] = "error.log"
+set[:rhapache][:package] = "httpd"
+set[:rhapache][:dir]     = "/etc/httpd"
+set[:rhapache][:log_dir] = "/var/log/httpd"
+set[:rhapache][:error_log] = "error.log"
 
-set[:apache][:binary]  = "/usr/sbin/httpd"
-set[:apache][:icondir] = "/var/www/icons"
-set[:apache][:cache_dir] = "/var/cache/httpd"
+set[:rhapache][:binary]  = "/usr/sbin/httpd"
+set[:rhapache][:icondir] = "/var/www/icons"
+set[:rhapache][:cache_dir] = "/var/cache/httpd"
 if node.platform_version.to_f >= 6 then
-  set[:apache][:pid_file] = "/var/run/httpd/httpd.pid"
+  set[:rhapache][:pid_file] = "/var/run/httpd/httpd.pid"
 else
-  set[:apache][:pid_file] = "/var/run/httpd.pid"
+  set[:rhapache][:pid_file] = "/var/run/httpd.pid"
 end
-set[:apache][:lib_dir] = node[:kernel][:machine] =~ /^i[36]86$/ ? "/usr/lib/httpd" : "/usr/lib64/httpd"
-set[:apache][:libexecdir] = "#{set[:apache][:lib_dir]}/modules"
+set[:rhapache][:lib_dir] = node[:kernel][:machine] =~ /^i[36]86$/ ? "/usr/lib/httpd" : "/usr/lib64/httpd"
+set[:rhapache][:libexecdir] = "#{set[:rhapache][:lib_dir]}/modules"
 
 case platform
 when "redhat","centos","scientific","fedora"
-  set[:apache][:user]    = "apache"
-  set[:apache][:group]   = "apache"
+  set[:rhapache][:user]    = "apache"
+  set[:rhapache][:group]   = "apache"
 when "suse"
   # XXX pretty sure this is the case but someone on a SUSE box should check
-  set[:apache][:user]    = "wwwrun"
-  set[:apache][:group]   = "wwwrun"
+  set[:rhapache][:user]    = "wwwrun"
+  set[:rhapache][:group]   = "wwwrun"
 end
 
 ###
@@ -52,34 +52,34 @@ end
 ###
 
 # General settings
-default[:apache][:listen_ports] = [ "80","443" ]
-default[:apache][:contact] = "ops@example.com"
-default[:apache][:timeout] = 300
-default[:apache][:keepalive] = "On"
-default[:apache][:keepaliverequests] = 100
-default[:apache][:keepalivetimeout] = 5
-default[:apache][:extendedstatus] = "Off"
+default[:rhapache][:listen_ports] = [ "80","443" ]
+default[:rhapache][:contact] = "ops@example.com"
+default[:rhapache][:timeout] = 300
+default[:rhapache][:keepalive] = "On"
+default[:rhapache][:keepaliverequests] = 100
+default[:rhapache][:keepalivetimeout] = 5
+default[:rhapache][:extendedstatus] = "Off"
 
 # Security
-default[:apache][:servertokens] = "Prod"
-default[:apache][:serversignature] = "Off"
-default[:apache][:traceenable] = "Off"
+default[:rhapache][:servertokens] = "Prod"
+default[:rhapache][:serversignature] = "Off"
+default[:rhapache][:traceenable] = "Off"
 
 # Prefork Attributes
-default[:apache][:prefork][:startservers] = 16
-default[:apache][:prefork][:minspareservers] = 16
-default[:apache][:prefork][:maxspareservers] = 32
-default[:apache][:prefork][:serverlimit] = 400
-default[:apache][:prefork][:maxclients] = 400
-default[:apache][:prefork][:maxrequestsperchild] = 10000
+default[:rhapache][:prefork][:startservers] = 16
+default[:rhapache][:prefork][:minspareservers] = 16
+default[:rhapache][:prefork][:maxspareservers] = 32
+default[:rhapache][:prefork][:serverlimit] = 400
+default[:rhapache][:prefork][:maxclients] = 400
+default[:rhapache][:prefork][:maxrequestsperchild] = 10000
 
 # Worker Attributes
-default[:apache][:worker][:startservers] = 4
-default[:apache][:worker][:maxclients] = 1024
-default[:apache][:worker][:minsparethreads] = 64
-default[:apache][:worker][:maxsparethreads] = 192
-default[:apache][:worker][:threadsperchild] = 64
-default[:apache][:worker][:maxrequestsperchild] = 0
+default[:rhapache][:worker][:startservers] = 4
+default[:rhapache][:worker][:maxclients] = 1024
+default[:rhapache][:worker][:minsparethreads] = 64
+default[:rhapache][:worker][:maxsparethreads] = 192
+default[:rhapache][:worker][:threadsperchild] = 64
+default[:rhapache][:worker][:maxrequestsperchild] = 0
 
 # Additional modules to load by default
-default[:apache][:additional_modules] = nil
+default[:rhapache][:additional_modules] = nil

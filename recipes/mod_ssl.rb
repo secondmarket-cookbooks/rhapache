@@ -22,24 +22,15 @@ package "mod_ssl" do
   action :install
 end
 
-file "#{node[:apache][:dir]}/conf.d/ssl.conf" do
+file "#{node[:rhapache][:dir]}/conf.d/ssl.conf" do
   action :delete
   backup false 
 end
 
-ports = node[:apache][:listen_ports].include?("443") ? node[:apache][:listen_ports] : [node[:apache][:listen_ports], "443"].flatten
+node[:rhapache][:listen_ports].push('443')
+node[:rhapache][:listen_ports].uniq!
 
-template "httpd.conf" do
-  path "#{node[:apache][:dir]}/conf/httpd.conf"
-  source "httpd.conf.erb"
-  owner "root"
-  group node[:apache][:root_group]
-  variables :apache_listen_ports => ports.map{|p| p.to_i}.uniq
-  mode 0644
-  notifies :restart, resources(:service => "apache2")
-end
-
-apache_module "ssl" do
+rhapache_module "ssl" do
   # nothing
 end
 

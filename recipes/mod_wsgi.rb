@@ -24,11 +24,11 @@ package "wsgi package" do
 end
 
 # Get rid of distro file
-file "#{node[:apache][:dir]}/conf.d/wsgi.conf" do
+file "#{node[:rhapache][:dir]}/conf.d/wsgi.conf" do
   action :delete
   backup false
 end
 
-apache_module "wsgi" do
+rhapache_module "wsgi" do
   # nothing
 end

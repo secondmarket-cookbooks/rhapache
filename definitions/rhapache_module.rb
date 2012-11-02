@@ -22,13 +22,12 @@
 # even if there are no config directives beyond just enabling the module.
 # This simplifies the "definitions", however, such that you need only one, apache_module.
 
-define :apache_module, :enable => true do
-  include_recipe "apache"
+define :rhapache_module, :enable => true do
 
   params[:filename] = params[:filename] || "mod_#{params[:name]}.so"
-  params[:module_path] = params[:module_path] || "#{node['apache']['libexecdir']}/#{params[:filename]}"
+  params[:module_path] = params[:module_path] || "#{node['rhapache']['libexecdir']}/#{params[:filename]}"
   
-  template "#{node[:apache][:dir]}/conf.d/mod_#{params[:name]}.conf" do
+  template "#{node[:rhapache][:dir]}/conf.d/mod_#{params[:name]}.conf" do
     source "mods/#{params[:name]}.conf.erb"
     notifies :restart, resources(:service => "apache2")
     mode 0644

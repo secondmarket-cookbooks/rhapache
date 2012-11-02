@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: apache
+# Cookbook Name:: rhapache
 # Recipe:: mod_deflate 
 #
 # Copyright (C) 2012 SecondMarket Labs, LLC.
@@ -17,6 +17,6 @@
 # limitations under the License.
 #
 
-apache_module "deflate" do
+rhapache_module "deflate" do
   # nothing
 end

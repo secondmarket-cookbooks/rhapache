@@ -42,7 +42,7 @@
 # Don't give away too much information about all the subcomponents
 # we are running.  Comment out this line if you don't mind remote sites
 # finding out what major optional modules you are running
-ServerTokens <%= node[:apache][:servertokens] %>
+ServerTokens <%= node[:rhapache][:servertokens] %>
 
 #
 # ServerRoot: The top of the directory tree under which the server's
@@ -55,37 +55,39 @@ ServerTokens <%= node[:apache][:servertokens] %>
 #
 # Do NOT add a slash at the end of the directory path.
 #
-ServerRoot "<%= node[:apache][:dir] %>"
+ServerRoot "<%= node[:rhapache][:dir] %>"
 
 #
 # PidFile: The file in which the server should record its process
-# identification number when it starts.
+# identification number when it starts.  Note the PIDFILE variable in
+# /etc/sysconfig/httpd must be set appropriately if this location is
+# changed.
 #
-PidFile <%= node[:apache][:pid_file] %>
+PidFile <%= node[:rhapache][:pid_file] %>
 
 #
 # Timeout: The number of seconds before receives and sends time out.
 #
-Timeout <%= node[:apache][:timeout] %>
+Timeout <%= node[:rhapache][:timeout] %>
 
 #
 # KeepAlive: Whether or not to allow persistent connections (more than
 # one request per connection). Set to "Off" to deactivate.
 #
-KeepAlive <%= node[:apache][:keepalive] %>
+KeepAlive <%= node[:rhapache][:keepalive] %>
 
 #
 # MaxKeepAliveRequests: The maximum number of requests to allow
 # during a persistent connection. Set to 0 to allow an unlimited amount.
 # We recommend you leave this number high, for maximum performance.
 #
-MaxKeepAliveRequests <%= node[:apache][:keepaliverequests] %>
+MaxKeepAliveRequests <%= node[:rhapache][:keepaliverequests] %>
 
 #
 # KeepAliveTimeout: Number of seconds to wait for the next request from the
 # same client on the same connection.
 #
-KeepAliveTimeout <%= node[:apache][:keepalivetimeout] %>
+KeepAliveTimeout <%= node[:rhapache][:keepalivetimeout] %>
 
 ##
 ## Server-Pool Size Regulation (MPM specific)
@@ -99,12 +101,12 @@ KeepAliveTimeout <%= node[:apache][:keepalivetimeout] %>
 # MaxClients: maximum number of server processes allowed to start
 # MaxRequestsPerChild: maximum number of requests a server process serves
 <IfModule prefork.c>
-StartServers          <%= node[:apache][:prefork][:startservers] %>
-MinSpareServers       <%= node[:apache][:prefork][:minspareservers] %>
-MaxSpareServers       <%= node[:apache][:prefork][:maxspareservers] %>
-ServerLimit           <%= node[:apache][:prefork][:serverlimit] %>
-MaxClients            <%= node[:apache][:prefork][:maxclients] %>
-MaxRequestsPerChild   <%= node[:apache][:prefork][:maxrequestsperchild] %>
+StartServers          <%= node[:rhapache][:prefork][:startservers] %>
+MinSpareServers       <%= node[:rhapache][:prefork][:minspareservers] %>
+MaxSpareServers       <%= node[:rhapache][:prefork][:maxspareservers] %>
+ServerLimit           <%= node[:rhapache][:prefork][:serverlimit] %>
+MaxClients            <%= node[:rhapache][:prefork][:maxclients] %>
+MaxRequestsPerChild   <%= node[:rhapache][:prefork][:maxrequestsperchild] %>
 </IfModule>
 
 # worker MPM
@@ -115,12 +117,12 @@ MaxRequestsPerChild   <%= node[:apache][:prefork][:maxrequestsperchild] %>
 # ThreadsPerChild: constant number of worker threads in each server process
 # MaxRequestsPerChild: maximum number of requests a server process serves
 <IfModule worker.c>
-StartServers          <%= node[:apache][:worker][:startservers] %>
-MaxClients            <%= node[:apache][:worker][:maxclients] %>
-MinSpareThreads       <%= node[:apache][:worker][:minsparethreads] %>
-MaxSpareThreads       <%= node[:apache][:worker][:maxsparethreads] %>
-ThreadsPerChild       <%= node[:apache][:worker][:threadsperchild] %>
-MaxRequestsPerChild   <%= node[:apache][:worker][:maxrequestsperchild] %>
+StartServers          <%= node[:rhapache][:worker][:startservers] %>
+MaxClients            <%= node[:rhapache][:worker][:maxclients] %>
+MinSpareThreads       <%= node[:rhapache][:worker][:minsparethreads] %>
+MaxSpareThreads       <%= node[:rhapache][:worker][:maxsparethreads] %>
+ThreadsPerChild       <%= node[:rhapache][:worker][:threadsperchild] %>
+MaxRequestsPerChild   <%= node[:rhapache][:worker][:maxrequestsperchild] %>
 </IfModule>
 
 #
@@ -186,6 +188,7 @@ LoadModule actions_module modules/mod_actions.so
 LoadModule speling_module modules/mod_speling.so
 LoadModule userdir_module modules/mod_userdir.so
 LoadModule alias_module modules/mod_alias.so
+LoadModule substitute_module modules/mod_substitute.so
 LoadModule rewrite_module modules/mod_rewrite.so
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
@@ -195,8 +198,6 @@ LoadModule proxy_connect_module modules/mod_proxy_connect.so
 LoadModule cache_module modules/mod_cache.so
 LoadModule suexec_module modules/mod_suexec.so
 LoadModule disk_cache_module modules/mod_disk_cache.so
-LoadModule file_cache_module modules/mod_file_cache.so
-LoadModule mem_cache_module modules/mod_mem_cache.so
 LoadModule cgi_module modules/mod_cgi.so
 LoadModule version_module modules/mod_version.so
 
@@ -221,7 +222,7 @@ Include conf.d/*.conf
 # information (ExtendedStatus On) or just basic information (ExtendedStatus
 # Off) when the "server-status" handler is called. The default is Off.
 #
-ExtendedStatus <%= node[:apache][:extendedstatus] %>
+ExtendedStatus <%= node[:rhapache][:extendedstatus] %>
 
 #
 # If you wish httpd to run as a different user or group, you must run
@@ -235,8 +236,8 @@ ExtendedStatus <%= node[:apache][:extendedstatus] %>
 #  when the value of (unsigned)Group is above 60000; 
 #  don't use Group #-1 on these systems!
 #
-User <%= node[:apache][:user] %>
-Group <%= node[:apache][:group] %>
+User <%= node[:rhapache][:user] %>
+Group <%= node[:rhapache][:group] %>
 
 ### Section 2: 'Main' server configuration
 #
@@ -255,7 +256,7 @@ Group <%= node[:apache][:group] %>
 # e-mailed.  This address appears on some server-generated pages, such
 # as error documents.  e.g. admin@your-domain.com
 #
-ServerAdmin <%= node[:apache][:contact] %>
+ServerAdmin <%= node[:rhapache][:contact] %>
 
 #
 # ServerName gives the name and port that the server uses to identify itself.
@@ -359,11 +360,11 @@ DocumentRoot "/var/www/html"
     # of a username on the system (depending on home directory
     # permissions).
     #
-    UserDir disable
+    UserDir disabled
 
     #
     # To enable requests to /~user/ to serve the user's public_html
-    # directory, remove the "UserDir disable" line above, and uncomment
+    # directory, remove the "UserDir disabled" line above, and uncomment
     # the following line instead:
     # 
     #UserDir public_html
@@ -413,6 +414,7 @@ AccessFileName .htaccess
 <Files ~ "^\.ht">
     Order allow,deny
     Deny from all
+    Satisfy All
 </Files>
 
 #
@@ -478,7 +480,7 @@ HostnameLookups Off
 # logged here.  If you *do* define an error logfile for a <VirtualHost>
 # container, that host's errors will be logged there and not here.
 #
-ErrorLog <%= node[:apache][:log_dir] %>/<%= node[:apache][:error_log] %>
+ErrorLog <%= node[:rhapache][:log_dir] %>/<%= node[:rhapache][:error_log] %>
 
 #
 # LogLevel: Control the number of messages logged to the error_log.
@@ -507,6 +509,7 @@ LogFormat "%{User-agent}i" agent
 # define per-<VirtualHost> access logfiles, transactions will be
 # logged therein and *not* in this file.
 #
+#CustomLog logs/access_log common
 
 #
 # If you would like to have separate agent and referer logfiles, uncomment
@@ -529,7 +532,7 @@ CustomLog logs/access_log combined
 # Set to "EMail" to also include a mailto: link to the ServerAdmin.
 # Set to one of:  On | Off | EMail
 #
-ServerSignature <%= node[:apache][:serversignature] %>
+ServerSignature <%= node[:rhapache][:serversignature] %>
 
 #
 # Aliases: Add here as many aliases as you need (with no limit). The format is 
@@ -544,10 +547,10 @@ ServerSignature <%= node[:apache][:serversignature] %>
 # We include the /icons/ alias for FancyIndexed directory listings.  If you
 # do not use FancyIndexing, you may comment this out.
 #
-Alias /icons/ "<%= node[:apache][:icondir] %>/"
+Alias /icons/ "<%= node[:rhapache][:icondir] %>/"
 
-<Directory "<%= node[:apache][:icondir] %>">
-    Options Indexes MultiViews
+<Directory "<%= node[:rhapache][:icondir] %>">
+    Options Indexes MultiViews FollowSymLinks
     AllowOverride None
     Order allow,deny
     Allow from all
@@ -597,7 +600,7 @@ ScriptAlias /cgi-bin/ "/var/www/cgi-bin/"
 # IndexOptions: Controls the appearance of server-generated directory
 # listings.
 #
-IndexOptions FancyIndexing VersionSort NameWidth=* HTMLTable
+IndexOptions FancyIndexing VersionSort NameWidth=* HTMLTable Charset=UTF-8
 
 #
 # AddIcon* directives tell the server which icon to show for different
@@ -774,6 +777,12 @@ AddDefaultCharset UTF-8
 #
 AddType application/x-compress .Z
 AddType application/x-gzip .gz .tgz
+
+#
+#   MIME-types for downloading Certificates and CRLs
+#
+AddType application/x-x509-ca-cert .crt
+AddType application/x-pkcs7-crl    .crl
 
 #
 # AddHandler allows you to map certain file extensions to "handlers":

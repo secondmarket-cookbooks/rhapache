@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: apache
+# Cookbook Name:: rhapache
 # Recipe:: mod_php5 
 #
 # Copyright 2008-2009, Opscode, Inc.
@@ -18,34 +18,14 @@
 # limitations under the License.
 #
 
-case node[:platform]
-
-when "redhat", "centos", "scientific"
-  package "php package" do
-    # TODO: Might want to give people a way to toggle what version of PHP they
-    # actually want on CentOS... 5.1 or 5.3
-    if node.platform_version.to_f < 6.0
-      package_name "php53"
-    else
-      package_name "php"
-    end
-    action :install
-  end
-
-when "fedora"
-  package "php package" do
-     package_name "php"
-     action :install
-  end
-
-end
+include_recipe "php"
 
 # delete stock config
-file "#{node[:apache][:dir]}/conf.d/php.conf" do
+file "#{node[:rhapache][:dir]}/conf.d/php.conf" do
   action :delete
 end
 
-apache_module "php5" do
+rhapache_module "php5" do
   case node['platform']
   when "redhat","centos","scientific","fedora"
     filename "libphp5.so"

@@ -19,11 +19,11 @@
 
 # :servername, :serveralias are required parameters but there are no reasonable defaults.
 
-define :apache_virtualhost, :enable => true, :servername => "localhost", :port => "80", :documentroot => "/var/www/html", :template => "virtualhost.erb", :cookbook => "apache" do
+define :rhapache_virtualhost, :enable => true, :servername => "localhost", :port => "80", :documentroot => "/var/www/html", :template => "virtualhost.erb", :cookbook => "rhapache" do
 
   include_recipe "apache"
   
-  conf = "#{node[:apache][:dir]}/conf.d/virtualhost-#{params[:servername]}-#{params[:port]}.conf"
+  conf = "#{node[:rhapache][:dir]}/conf.d/virtualhost-#{params[:servername]}-#{params[:port]}.conf"
 
   if params[:enable]
 

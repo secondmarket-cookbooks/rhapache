@@ -73,7 +73,8 @@ Vagrant::Config.run do |config|
     }
 
     chef.run_list = [
-      "recipe[rhapache::default]"
+      "recipe[rhapache::server]",
+      "recipe[rhapache::mod_ssl]"
     ]
   end
 end
