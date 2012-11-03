@@ -18,17 +18,18 @@
 # limitations under the License.
 #
 
+unless node['rhapache']['listen_ports'].include?("443")
+  node.set['rhapache']['listen_ports'] = node['rhapache']['listen_ports'] + ["443"]
+end
+
 package "mod_ssl" do
   action :install
 end
 
-file "#{node[:rhapache][:dir]}/conf.d/ssl.conf" do
+file "#{node['rhapache']['dir']}/conf.d/ssl.conf" do
   action :delete
   backup false 
 end
-
-node[:rhapache][:listen_ports].push('443')
-node[:rhapache][:listen_ports].uniq!
 
 rhapache_module "ssl" do
   # nothing
